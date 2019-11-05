@@ -26,19 +26,21 @@ public static class Helper
     }
     public static string ExternalIp()
     {
-        var addresses = Dns.GetHostEntry((Dns.GetHostName()))
-                .AddressList
-                .Where(x => x.AddressFamily == AddressFamily.InterNetwork)
-                .Select(x => x.ToString())
-                .ToArray();
+        string externalip = new WebClient().DownloadString("http://icanhazip.com");            
+        return externalip;
+        // var addresses = Dns.GetHostEntry((Dns.GetHostName()))
+        //         .AddressList
+        //         .Where(x => x.AddressFamily == AddressFamily.InterNetwork)
+        //         .Select(x => x.ToString())
+        //         .ToArray();
 
-        // foreach(var ip in addresses)
-        // {
-        //     Console.WriteLine(ip);
-        // }
-        if(addresses.Length > 1)
-            return addresses[1];
-        else
-            return addresses[0];
+        // // foreach(var ip in addresses)
+        // // {
+        // //     Console.WriteLine(ip);
+        // // }
+        // if(addresses.Length > 1)
+        //     return addresses[1];
+        // else
+        //     return addresses[0];
     }
 }
