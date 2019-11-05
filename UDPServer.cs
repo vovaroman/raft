@@ -82,7 +82,7 @@ namespace c_Raft
                 switch(action)
                 {
                     case ServerActions.Ping:
-                        Node.Ping = true;
+                        Node.KeepFollower = true;
                         break;
                     case ServerActions.GetClients:
                         var clients = data["clients"];
@@ -101,17 +101,23 @@ namespace c_Raft
                         break;
                     case ServerActions.Election:
                         Console.WriteLine("ping");
-                        Node.Ping = false;
+                        Node.KeepFollower = true;
                         break;
                     case ServerActions.VoteForLeader:
                         if(Node.State == NodeState.Follower)
                         {
+                            Node.KeepFollower = true;
                             SendSignal(ServerActions.Vote, RemoteIpEndPoint.Address.ToString(), RemoteIpEndPoint.Port);
                         }
                         break;
 
                     case ServerActions.Vote:
+                        Console.WriteLine("I VOTE FOR LEADER");
                         Node.VoteCount++;
+                        break;
+                    case ServerActions.KeepFollower:
+                        Console.WriteLine("I GOT HEARTBEAT FROM LEADER");
+                        Node.KeepFollower = true;
                         break;
                 }
             }
