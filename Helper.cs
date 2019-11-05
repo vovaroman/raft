@@ -10,19 +10,27 @@ public static class Helper
     public static int UdpPort = 0;//GetAvailablePort(1000);
 
     public static int ServerPort = 616;
-    public static string ServerIP = "192.168.1.97";
+    public static string ServerIP = "109.185.157.125";
 
     public static string GetLocalIPAddress()
     {
-        var host = Dns.GetHostEntry(Dns.GetHostName());
-        foreach (var ip in host.AddressList)
+        string localIP;
+        using (Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, 0))
         {
-            if (ip.AddressFamily == AddressFamily.InterNetwork)
-            {
-                return ip.ToString();
-            }
+            socket.Connect("8.8.8.8", 65530);
+            IPEndPoint endPoint = socket.LocalEndPoint as IPEndPoint;
+            localIP = endPoint.Address.ToString();
         }
-        throw new Exception("No network adapters with an IPv4 address in the system!");
+        return localIP;
+        // var host = Dns.GetHostEntry(Dns.GetHostName());
+        // foreach (var ip in host.AddressList)
+        // {
+        //     if (ip.AddressFamily == AddressFamily.InterNetwork)
+        //     {
+        //         return ip.ToString();
+        //     }
+        // }
+        // throw new Exception("No network adapters with an IPv4 address in the system!");
     }
     public static string ExternalIp()
     {

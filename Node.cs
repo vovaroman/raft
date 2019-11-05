@@ -11,7 +11,7 @@ namespace c_Raft
         public static int VoteCount = 0;
         public static bool KeepFollower = true;
         public static List<NodeModel> Nodes = new List<NodeModel>();
-        private int _electionTime = 5000;//new Random().Next(150,301) * 10;
+        private int _electionTime = 10000;//new Random().Next(150,301) * 10;
         public int ElectionTime
         {
             get{

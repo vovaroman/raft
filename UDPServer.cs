@@ -55,7 +55,7 @@ namespace c_Raft
             var dataToSend = new Dictionary<string, object>();
             dataToSend.Add("action","GetClients");
             var node = new NodeModel(){
-                IP = Helper.ExternalIp(),
+                IP = Helper.GetLocalIPAddress(),
                 Port = ((IPEndPoint)udpServer.Client.LocalEndPoint).Port
             };
             dataToSend.Add("clients",node);
@@ -96,7 +96,7 @@ namespace c_Raft
                                 }
                             );
                         }
-                        Node.Nodes.RemoveAll(x => x.IP == Helper.ExternalIp() && x.Port == ((IPEndPoint)udpServer.Client.LocalEndPoint).Port
+                        Node.Nodes.RemoveAll(x => x.IP == Helper.GetLocalIPAddress() && x.Port == ((IPEndPoint)udpServer.Client.LocalEndPoint).Port
                         );
                         break;
                     case ServerActions.Election:
