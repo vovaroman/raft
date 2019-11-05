@@ -6,8 +6,9 @@ namespace c_Raft
 {
     public class Node
     {
-        public NodeState State = NodeState.Follower;
+        public static NodeState State = NodeState.Follower;
 
+        public static int VoteCount = 0;
         public static bool Ping = true;
         public static List<NodeModel> Nodes = new List<NodeModel>();
         private int _electionTime = new Random().Next(150,301) * 10;
@@ -27,7 +28,9 @@ namespace c_Raft
                 switch(State)
                 {
                     case NodeState.Follower:
-                        
+                        UDPServer.SendSignal(ServerActions.VoteForLeader);
+                        VoteCount++;
+                        State = NodeState.Candidate;
                     break;
                     case NodeState.Candidate:
                     break;

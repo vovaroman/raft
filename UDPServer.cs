@@ -30,6 +30,26 @@ namespace c_Raft
 
         }
 
+        public static void SendSignal(object action)
+        {
+            foreach(var client in Node.Nodes)
+            {
+                var dataToSend = new Dictionary<string, object>();
+                dataToSend.Add("action", action);
+                var message = Newtonsoft.Json.JsonConvert.SerializeObject(dataToSend);
+                byte[] data = Encoding.UTF8.GetBytes(message);
+                udpServer.Send(data, data.Length, client.IP, client.Port);
+            }
+        }
+        public static void SendSignal(object action, string IP, int Port)
+        {
+            var dataToSend = new Dictionary<string, object>();
+            dataToSend.Add("action", action);
+            var message = Newtonsoft.Json.JsonConvert.SerializeObject(dataToSend);
+            byte[] data = Encoding.UTF8.GetBytes(message);
+            udpServer.Send(data, data.Length, IP, Port);
+        }
+
         public void SendMyIP()
         {
             var dataToSend = new Dictionary<string, object>();
@@ -82,6 +102,16 @@ namespace c_Raft
                     case ServerActions.Election:
                         Console.WriteLine("ping");
                         Node.Ping = false;
+                        break;
+                    case ServerActions.VoteForLeader:
+                        if(Node.State == NodeState.Follower)
+                        {
+                            SendSignal(ServerActions.Vote, RemoteIpEndPoint.Address.ToString(), RemoteIpEndPoint.Port);
+                        }
+                        break;
+
+                    case ServerActions.Vote:
+                        Node.VoteCount++;
                         break;
                 }
             }

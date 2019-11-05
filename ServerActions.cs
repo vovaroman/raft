@@ -9,6 +9,8 @@ namespace c_Raft
         
         Election,
 
-        VoteForLeader
+        VoteForLeader,
+
+        Vote
     }
 }

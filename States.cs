@@ -6,6 +6,7 @@ namespace c_Raft
     {
         Follower,
         Candidate,
-        Leader
+        Leader,
+
     }
 }
