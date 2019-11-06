@@ -50,6 +50,16 @@ namespace c_Raft
             udpServer.Send(data, data.Length, IP, Port);
         }
 
+         public static void SendDataToLeader(object data, string IP, int Port)
+         {
+            var dataToSend = new Dictionary<string, object>();
+            dataToSend.Add("action", "SendToLeader");
+            dataToSend.Add("data", data);
+            var message = Newtonsoft.Json.JsonConvert.SerializeObject(dataToSend);
+            byte[] byteData = Encoding.UTF8.GetBytes(message);
+            udpServer.Send(byteData, byteData.Length, IP, Port);
+         }
+
         public void SendMyIP()
         {
             var dataToSend = new Dictionary<string, object>();
@@ -118,6 +128,14 @@ namespace c_Raft
                     case ServerActions.KeepFollower:
                         Console.WriteLine("I GOT HEARTBEAT FROM LEADER");
                         Node.KeepFollower = true;
+                        break;
+                    case ServerActions.GetFromLeader:
+                        var output = new FileConnector().GetDataFromSource();
+                        SendDataToLeader(output, Helper.ServerIP, Helper.ServerPort);
+                        break;
+                    case ServerActions.SendToLeader:
+                        var dataToWrite = data["data"];
+                        new FileConnector().WriteDataToSource(dataToWrite.ToString());
                         break;
                 }
             }

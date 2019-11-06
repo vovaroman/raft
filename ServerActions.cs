@@ -15,6 +15,10 @@ namespace c_Raft
 
         KeepFollower,
 
-        GetLeader
+        GetLeader,
+
+        SendToLeader,
+
+        GetFromLeader
     }
 }
