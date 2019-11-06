@@ -28,6 +28,7 @@ namespace c_Raft
                     Console.WriteLine("I AM LEADER");
                     new System.Threading.ManualResetEvent(false).WaitOne(1000);
                     UDPServer.SendSignal(ServerActions.KeepFollower);
+                    UDPServer.SendSignal(ServerActions.GetLeader, Helper.ServerIP, Helper.ServerPort);
                     continue;
                 }
                 new System.Threading.ManualResetEvent(false).WaitOne(ElectionTime);

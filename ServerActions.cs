@@ -13,6 +13,8 @@ namespace c_Raft
 
         Vote,
 
-        KeepFollower
+        KeepFollower,
+
+        GetLeader
     }
 }
