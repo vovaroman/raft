@@ -126,7 +126,7 @@ namespace c_Raft
                         Node.VoteCount++;
                         break;
                     case ServerActions.KeepFollower:
-                        Console.WriteLine("I GOT HEARTBEAT FROM LEADER");
+                        Console.Write($"\rI GOT HEARTBEAT FROM LEADER {DateTime.Now.ToString()}");
                         Node.KeepFollower = true;
                         break;
                     case ServerActions.GetFromLeader:
