@@ -14,7 +14,7 @@ namespace c_Raft
     public class UDPServer
     {
         private static UdpClient udpServer = new UdpClient(Helper.UdpPort);
-
+        private static FileConnector fileConnector = new FileConnector();
         public static void SendElection()
         {
             foreach(var client in Node.Nodes)
@@ -32,15 +32,37 @@ namespace c_Raft
 
         public static void SendSignal(object action)
         {
-            foreach(var client in Node.Nodes)
+            lock(Node.Nodes)
             {
-                var dataToSend = new Dictionary<string, object>();
-                dataToSend.Add("action", action);
-                var message = Newtonsoft.Json.JsonConvert.SerializeObject(dataToSend);
-                byte[] data = Encoding.UTF8.GetBytes(message);
-                udpServer.Send(data, data.Length, client.IP, client.Port);
+                foreach(var client in Node.Nodes)
+                {
+                    var dataToSend = new Dictionary<string, object>();
+                    dataToSend.Add("action", action);
+                    var message = Newtonsoft.Json.JsonConvert.SerializeObject(dataToSend);
+                    byte[] data = Encoding.UTF8.GetBytes(message);
+                    udpServer.Send(data, data.Length, client.IP, client.Port);
+                }
             }
         }
+
+        public static void SendSignal(object action, string data)
+        {
+            lock(Node.Nodes)
+            {
+                foreach(var client in Node.Nodes)
+                {
+                    var dataToSend = new Dictionary<string, object>();
+                    dataToSend.Add("action", action);
+                    dataToSend.Add("data", data);
+                    dataToSend.Add("hash", )
+                    var message = Newtonsoft.Json.JsonConvert.SerializeObject(dataToSend);
+                    byte[] dataBytes = Encoding.UTF8.GetBytes(message);
+                    udpServer.Send(dataBytes, dataBytes.Length, client.IP, client.Port);
+                }
+            }
+            
+        }
+
         public static void SendSignal(object action, string IP, int Port)
         {
             var dataToSend = new Dictionary<string, object>();
@@ -96,29 +118,35 @@ namespace c_Raft
                         break;
                     case ServerActions.GetClients:
                         var clients = data["clients"];
-                        foreach(var client in clients)
+                        lock(Node.Nodes)
                         {
-                            if(Node.Nodes.FirstOrDefault(x => x.IP == client["IP"].ToString() && x.Port == int.Parse(client["Port"].ToString())) == null)
-                            Node.Nodes.Add(
-                                new NodeModel(){
-                                    IP = client["IP"].ToString(),
-                                    Port = int.Parse(client["Port"].ToString())
-                                }
-                            );
+                            foreach(var client in clients)
+                            {
+                                if(Node.Nodes.FirstOrDefault(x => x.IP == client["IP"].ToString() && x.Port == int.Parse(client["Port"].ToString())) == null)
+                                Node.Nodes.Add(
+                                    new NodeModel(){
+                                        IP = client["IP"].ToString(),
+                                        Port = int.Parse(client["Port"].ToString())
+                                    }
+                                );
+                            }
+                            Node.Nodes.RemoveAll(x => x.IP == Helper.GetLocalIPAddress() && x.Port == ((IPEndPoint)udpServer.Client.LocalEndPoint).Port);
                         }
-                        Node.Nodes.RemoveAll(x => x.IP == Helper.GetLocalIPAddress() && x.Port == ((IPEndPoint)udpServer.Client.LocalEndPoint).Port
-                        );
                         break;
                     case ServerActions.Election:
                         Console.WriteLine("ping");
                         Node.KeepFollower = true;
                         break;
                     case ServerActions.VoteForLeader:
-                        if(Node.State == NodeState.Follower)
+                        lock(Node.KeepFollower)
                         {
-                            Node.KeepFollower = true;
-                            SendSignal(ServerActions.Vote, RemoteIpEndPoint.Address.ToString(), RemoteIpEndPoint.Port);
+                            if(Node.State == NodeState.Follower)
+                            {
+                                Node.KeepFollower = true;
+                                SendSignal(ServerActions.Vote, RemoteIpEndPoint.Address.ToString(), RemoteIpEndPoint.Port);
+                            }
                         }
+                        
                         break;
 
                     case ServerActions.Vote:
@@ -128,6 +156,14 @@ namespace c_Raft
                     case ServerActions.KeepFollower:
                         Console.Write($"\rI GOT HEARTBEAT FROM LEADER {DateTime.Now.ToString()}");
                         Node.KeepFollower = true;
+                        Node.State = NodeState.Follower;
+                        var dataFromLeader = data["data"].ToString();
+                        JObject deserializedData = new JObject();
+                        deserializedData = JObject.Parse(dataFromLeader);
+                        if (deserializedData["id"].ToString() != FileConnector.LastID)
+                        {
+                            fileConnector.WriteDataToSource(dataFromLeader);
+                        }
                         break;
                     case ServerActions.GetFromLeader:
                         var output = new FileConnector().GetDataFromSource();

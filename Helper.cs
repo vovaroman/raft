@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Security.Cryptography;
 
 public static class Helper
 {
     public static int UdpPort = 0;//GetAvailablePort(1000);
 
     public static int ServerPort = 616;
-    public static string ServerIP = "10.35.1.32";
+    public static string ServerIP = "192.168.1.126";
 
     public static string GetLocalIPAddress()
     {
@@ -36,19 +38,7 @@ public static class Helper
     {
         string externalip = new WebClient().DownloadString("http://icanhazip.com");            
         return externalip;
-        // var addresses = Dns.GetHostEntry((Dns.GetHostName()))
-        //         .AddressList
-        //         .Where(x => x.AddressFamily == AddressFamily.InterNetwork)
-        //         .Select(x => x.ToString())
-        //         .ToArray();
 
-        // // foreach(var ip in addresses)
-        // // {
-        // //     Console.WriteLine(ip);
-        // // }
-        // if(addresses.Length > 1)
-        //     return addresses[1];
-        // else
-        //     return addresses[0];
     }
+
 }

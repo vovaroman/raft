@@ -7,11 +7,11 @@ namespace c_Raft
     public class Node
     {
         public static NodeState State = NodeState.Follower;
-
+        private static FileConnector fileConnector = new FileConnector();
         public static int VoteCount = 0;
-        public static bool KeepFollower = true;
+        public static dynamic KeepFollower = true;
         public static List<NodeModel> Nodes = new List<NodeModel>();
-        private int _electionTime = new Random().Next(150,301);
+        private int _electionTime = 300;//new Random().Next(150,301);
         public int ElectionTime
         {
             get{
@@ -26,16 +26,17 @@ namespace c_Raft
             {
                 if(State == NodeState.Leader){
                     Console.Write($"\rI AM LEADER - {DateTime.Now.ToString()}");
-                    new System.Threading.ManualResetEvent(false).WaitOne(1);
-                    UDPServer.SendSignal(ServerActions.KeepFollower);
+                    
+                    // new System.Threading.ManualResetEvent(false).WaitOne(50);
+                    UDPServer.SendSignal(ServerActions.KeepFollower, fileConnector.GetDataFromSource());
                     UDPServer.SendSignal(ServerActions.GetLeader, Helper.ServerIP, Helper.ServerPort);
-                    continue;
+                    // continue;
                 }
                 new System.Threading.ManualResetEvent(false).WaitOne(ElectionTime);
                 switch(State)
                 {
                     case NodeState.Follower:
-
+                        
                         if(!Node.KeepFollower)
                         {
                             Console.Write($"\rI WANT TO BE LEADER {DateTime.Now.ToString()}");
