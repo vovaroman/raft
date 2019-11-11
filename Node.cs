@@ -28,7 +28,7 @@ namespace c_Raft
                     Console.Write($"\rI AM LEADER - {DateTime.Now.ToString()}");
 
                     // new System.Threading.ManualResetEvent(false).WaitOne(50);
-                    UDPServer.SendSignal(ServerActions.KeepFollower, fileConnector.GetDataFromSource());
+                    UDPServer.SendSignal(ServerActions.KeepFollower, FileConnector.GetLastMessageAsText());
                     UDPServer.SendSignal(ServerActions.GetLeader, Helper.ServerIP, Helper.ServerPort);
                     // continue;
                 }

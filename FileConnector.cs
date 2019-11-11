@@ -16,12 +16,18 @@ namespace c_Raft
         public static  string LastID = GetLastId();
 
         private static string GetLastId() {
+            var message = GetLastMessageAsText();
+            if(message != null) return string.Empty;
+            var data = new JObject();
+            data = JObject.Parse(GetLastMessageAsText());
+            return data["id"].ToString();
+        }
+
+         public static string GetLastMessageAsText() {
             if (File.Exists(path)) {
                 var message = File.ReadLines(path).Reverse().Take(4).ToString();
                 if (message == String.Empty) { return String.Empty; }
-                JObject data = new JObject();
-                data = JObject.Parse(message);
-                return data["id"].ToString();
+                return message;
             }
            return String.Empty;
         } 
