@@ -27,7 +27,9 @@ namespace c_Raft
             if (File.Exists(path)) {
                 var message = File.ReadLines(path).Reverse().Take(4).ToString();
                 if (message == String.Empty) { return String.Empty; }
-                return message;
+                var data = new JObject();
+                data = JObject.Parse(message);
+                return data.ToString();
             }
            return String.Empty;
         } 
