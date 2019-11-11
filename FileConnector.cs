@@ -25,7 +25,7 @@ namespace c_Raft
 
          public static string GetLastMessageAsText() {
             if (File.Exists(path)) {
-                var message = File.ReadLines(path).Reverse().Take(4).ToString();
+                var message = string.Join('\n', File.ReadLines(path).Reverse().Take(4).ToList());
                 if (message == String.Empty) { return String.Empty; }
                 var data = new JObject();
                 data = JObject.Parse(message);
