@@ -54,7 +54,6 @@ namespace c_Raft
                     var dataToSend = new Dictionary<string, object>();
                     dataToSend.Add("action", action);
                     dataToSend.Add("data", data);
-                    dataToSend.Add("hash", )
                     var message = Newtonsoft.Json.JsonConvert.SerializeObject(dataToSend);
                     byte[] dataBytes = Encoding.UTF8.GetBytes(message);
                     udpServer.Send(dataBytes, dataBytes.Length, client.IP, client.Port);
@@ -158,11 +157,15 @@ namespace c_Raft
                         Node.KeepFollower = true;
                         Node.State = NodeState.Follower;
                         var dataFromLeader = data["data"].ToString();
-                        JObject deserializedData = new JObject();
-                        deserializedData = JObject.Parse(dataFromLeader);
-                        if (deserializedData["id"].ToString() != FileConnector.LastID)
+                        if(dataFromLeader != string.Empty) 
                         {
-                            fileConnector.WriteDataToSource(dataFromLeader);
+                            JObject deserializedData = new JObject();
+                            deserializedData = JObject.Parse(dataFromLeader);
+                            if (deserializedData["id"].ToString() != FileConnector.LastID)
+                            {
+                                FileConnector.LastID = deserializedData["id"].ToString();
+                                fileConnector.WriteDataToSource(dataFromLeader);
+                            }
                         }
                         break;
                     case ServerActions.GetFromLeader:
@@ -170,8 +173,11 @@ namespace c_Raft
                         SendData(output, Helper.ServerIP, Helper.ServerPort);
                         break;
                     case ServerActions.SendToLeader:
-                        var dataToWrite = data["data"];
-                        new FileConnector().WriteDataToSource(dataToWrite.ToString());
+                        var dataToWrite = data["data"].ToString();
+                        JObject deserializedDataFromLeader = new JObject();
+                        deserializedDataFromLeader = JObject.Parse(dataToWrite);
+                        FileConnector.LastID = deserializedDataFromLeader["id"].ToString();
+                        new FileConnector().WriteDataToSource('\n' + dataToWrite.ToString());
                         break;
                     
                 }

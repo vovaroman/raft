@@ -17,7 +17,7 @@ namespace c_Raft
 
         private static string GetLastId() {
             if (File.Exists(path)) {
-                var message = File.ReadLines(path).Last();
+                var message = File.ReadLines(path).Reverse().Take(4).ToString();
                 if (message == String.Empty) { return String.Empty; }
                 JObject data = new JObject();
                 data = JObject.Parse(message);
@@ -27,8 +27,11 @@ namespace c_Raft
         } 
         public override string GetDataFromSource()
         {
-            string readText = File.ReadAllText(path);
-            return readText;
+            if (File.Exists(path)) {
+                string readText = File.ReadAllText(path);
+                return readText;
+            }
+            return string.Empty;
         }
 
         public override void WriteDataToSource(string data)
