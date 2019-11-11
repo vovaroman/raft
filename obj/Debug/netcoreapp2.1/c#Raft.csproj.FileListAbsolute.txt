@@ -1,5 +1,4 @@
 /Users/vr/Desktop/c#Raft/obj/Debug/netcoreapp2.1/c#Raft.csprojAssemblyReference.cache
-/Users/vr/Desktop/c#Raft/obj/Debug/netcoreapp2.1/c#Raft.csproj.CoreCompileInputs.cache
 /Users/vr/Desktop/c#Raft/obj/Debug/netcoreapp2.1/c#Raft.AssemblyInfoInputs.cache
 /Users/vr/Desktop/c#Raft/obj/Debug/netcoreapp2.1/c#Raft.AssemblyInfo.cs
 /Users/vr/Desktop/c#Raft/bin/Debug/netcoreapp2.1/c#Raft.deps.json

@@ -19,6 +19,7 @@ namespace c_Raft
 
         SendToLeader,
 
-        GetFromLeader
+        GetFromLeader,
+        SendDataToClient
     }
 }

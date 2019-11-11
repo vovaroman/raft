@@ -50,7 +50,7 @@ namespace c_Raft
             udpServer.Send(data, data.Length, IP, Port);
         }
 
-         public static void SendDataToLeader(object data, string IP, int Port)
+         public static void SendData(object data, string IP, int Port)
          {
             var dataToSend = new Dictionary<string, object>();
             dataToSend.Add("action", "SendToLeader");
@@ -131,12 +131,13 @@ namespace c_Raft
                         break;
                     case ServerActions.GetFromLeader:
                         var output = new FileConnector().GetDataFromSource();
-                        SendDataToLeader(output, Helper.ServerIP, Helper.ServerPort);
+                        SendData(output, Helper.ServerIP, Helper.ServerPort);
                         break;
                     case ServerActions.SendToLeader:
                         var dataToWrite = data["data"];
                         new FileConnector().WriteDataToSource(dataToWrite.ToString());
                         break;
+                    
                 }
             }
         }
