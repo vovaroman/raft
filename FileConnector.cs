@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading;
@@ -11,7 +12,9 @@ namespace c_Raft
 {
     public class FileConnector : DataConnector
     {
-        private static string path = @".\datasource.txt";
+        private static string myExeDir = new FileInfo(Assembly.GetEntryAssembly().Location).Directory.ToString();
+
+        private static string path = @"datasource.txt";
 
         public static  string LastID = GetLastId();
 
