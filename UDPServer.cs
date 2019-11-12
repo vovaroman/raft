@@ -161,9 +161,9 @@ namespace c_Raft
                         {
                             JObject deserializedData = new JObject();
                             deserializedData = JObject.Parse(dataFromLeader);
-                            var currentData = FileConnector.GetAllMessagesAsText();
+                            // var currentDataFromFile = FileConnector.GetAllMessagesAsText();
                             FileConnector.ClearFile();
-                            fileConnector.WriteDataToSource(currentData + deserializedData.ToString());
+                            fileConnector.WriteDataToSource(deserializedData.ToString());
 
                             // if (deserializedData["id"].ToString() != FileConnector.LastID)
                             // {
