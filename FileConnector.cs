@@ -16,15 +16,15 @@ namespace c_Raft
 
         private static string path = @"datasource.txt";
 
-        public static  string LastID = GetLastId();
+        // public static  string LastID = GetLastId();
 
-        private static string GetLastId() {
-            var message = GetLastMessageAsText();
-            if(message != null) return string.Empty;
-            var data = new JObject();
-            data = JObject.Parse(GetLastMessageAsText());
-            return data["id"].ToString();
-        }
+        // private static string GetLastId() {
+        //     var message = GetLastMessageAsText();
+        //     if(message != null) return string.Empty;
+        //     var data = new JObject();
+        //     data = JObject.Parse(GetLastMessageAsText());
+        //     return data["id"].ToString();
+        // }
 
         public static string GetAllMessagesAsText()
         {
@@ -37,23 +37,23 @@ namespace c_Raft
             }
             return string.Empty;
         }
-         public static string GetLastMessageAsText() {
-            if (File.Exists(path)) {
+        //  public static string GetLastMessageAsText() {
+        //     if (File.Exists(path)) {
 
-                var tempList = File.ReadLines(path).Reverse().Take(4).ToList();
-                // tempList[0] = "{";
-                // tempList[3] = "}";
-                tempList.Reverse();
-                string message = tempList.Aggregate((a, b) => a + ' ' + b);
+        //         var tempList = File.ReadLines(path).Reverse().Take(4).ToList();
+        //         // tempList[0] = "{";
+        //         // tempList[3] = "}";
+        //         tempList.Reverse();
+        //         string message = tempList.Aggregate((a, b) => a + ' ' + b);
 
-                // var message = string.Join('\n', tempList);
-                if (message == String.Empty) { return String.Empty; }
-                var data = new JObject();
-                data = JObject.Parse(message);
-                return data.ToString();
-            }
-           return String.Empty;
-        } 
+        //         // var message = string.Join('\n', tempList);
+        //         if (message == String.Empty) { return String.Empty; }
+        //         var data = new JObject();
+        //         data = JObject.Parse(message);
+        //         return data.ToString();
+        //     }
+        //    return String.Empty;
+        // } 
         public override string GetDataFromSource()
         {
             if (File.Exists(path)) {
