@@ -11,7 +11,7 @@ namespace c_Raft
         public static int VoteCount = 0;
         public static dynamic KeepFollower = true;
         public static List<NodeModel> Nodes = new List<NodeModel>();
-        private int _electionTime = 150;//new Random().Next(150,301);
+        private int _electionTime = 300;//new Random().Next(150,301);
         public int ElectionTime
         {
             get{
@@ -45,7 +45,7 @@ namespace c_Raft
                             State = NodeState.Leader;
                             continue;
                         }
-                        Console.Write($"\rIM Follower {DateTime.Now.ToString()}");
+                        // Console.Write($"\rIM Follower {DateTime.Now.ToString()}");
 
                     break;
                     case NodeState.Candidate:
