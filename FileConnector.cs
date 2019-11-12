@@ -29,11 +29,11 @@ namespace c_Raft
         public static string GetAllMessagesAsText()
         {
             if (File.Exists(path)) {
-                var tempList = File.ReadLines(path);
-                string message = tempList.Aggregate((a, b) => a + ' ' + b);
-                var data = new JObject();
-                data = JObject.Parse(message);
-                return data.ToString();
+                var temp = File.ReadAllText(path);
+                // string message = tempList.Aggregate((a, b) => a + ' ' + b);
+                // var data = new JObject();
+                // data = JObject.Parse(tempList);
+                return temp;//data.ToString();
             }
             return string.Empty;
         }
