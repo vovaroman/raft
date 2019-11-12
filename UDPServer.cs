@@ -159,11 +159,11 @@ namespace c_Raft
                         var dataFromLeader = data["data"].ToString();
                         if(dataFromLeader != string.Empty) 
                         {
-                            JObject deserializedData = new JObject();
-                            deserializedData = JObject.Parse(dataFromLeader);
+                            // JObject deserializedData = new JObject();
+                            // deserializedData = JObject.Parse(dataFromLeader);
                             // var currentDataFromFile = FileConnector.GetAllMessagesAsText();
                             FileConnector.ClearFile();
-                            fileConnector.WriteDataToSource(deserializedData.ToString());
+                            fileConnector.WriteDataToSource(dataFromLeader);
 
                             // if (deserializedData["id"].ToString() != FileConnector.LastID)
                             // {
