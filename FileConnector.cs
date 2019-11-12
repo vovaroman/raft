@@ -26,6 +26,17 @@ namespace c_Raft
             return data["id"].ToString();
         }
 
+        public static string GetAllMessagesAsText()
+        {
+            if (File.Exists(path)) {
+                var tempList = File.ReadLines(path);
+                string message = tempList.Aggregate((a, b) => a + ' ' + b);
+                var data = new JObject();
+                data = JObject.Parse(message);
+                return data.ToString();
+            }
+            return string.Empty;
+        }
          public static string GetLastMessageAsText() {
             if (File.Exists(path)) {
 
@@ -52,6 +63,10 @@ namespace c_Raft
             return string.Empty;
         }
 
+        public static void ClearFile()
+        {
+            File.WriteAllText(path, String.Empty);
+        }
         public override void WriteDataToSource(string data)
         {
             File.AppendAllText(path, data, Encoding.UTF8);

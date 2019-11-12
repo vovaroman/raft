@@ -161,11 +161,14 @@ namespace c_Raft
                         {
                             JObject deserializedData = new JObject();
                             deserializedData = JObject.Parse(dataFromLeader);
-                            if (deserializedData["id"].ToString() != FileConnector.LastID)
-                            {
-                                FileConnector.LastID = deserializedData["id"].ToString();
-                                fileConnector.WriteDataToSource('\n'+dataFromLeader+'\n');
-                            }
+                            FileConnector.ClearFile();
+                            fileConnector.WriteDataToSource(deserializedData.ToString());
+
+                            // if (deserializedData["id"].ToString() != FileConnector.LastID)
+                            // {
+                            //     FileConnector.LastID = deserializedData["id"].ToString();
+                            //     fileConnector.WriteDataToSource('\n'+dataFromLeader+'\n');
+                            // }
                         }
                         break;
                     case ServerActions.GetFromLeader:
@@ -176,8 +179,10 @@ namespace c_Raft
                         var dataToWrite = data["data"].ToString();
                         JObject deserializedDataFromLeader = new JObject();
                         deserializedDataFromLeader = JObject.Parse(dataToWrite);
-                        FileConnector.LastID = deserializedDataFromLeader["id"].ToString();
-                        new FileConnector().WriteDataToSource('\n' + dataToWrite.ToString() + '\n');
+                        FileConnector.ClearFile();
+                        new FileConnector().WriteDataToSource(deserializedDataFromLeader.ToString());
+                        // FileConnector.LastID = deserializedDataFromLeader["id"].ToString();
+                        // new FileConnector().WriteDataToSource('\n' + dataToWrite.ToString() + '\n');
                         break;
                     
                 }
