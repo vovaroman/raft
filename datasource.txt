@@ -1,4 +1,7 @@
 ﻿{
-  "id": "e8608753-f26e-42af-a036-24e4eb3bf488",
-  "value": "pula"
+  "id": "9c9cd762-4a46-4fae-882a-b0fac79fb294",
+  "value": "test"
+}{
+  "action": 10,
+  "address": "{\"Ip\":\"10.35.1.82\",\"Port\":\"61276\"}"
 }

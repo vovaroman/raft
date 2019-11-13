@@ -10,7 +10,7 @@ using Newtonsoft.Json.Linq;
 
 namespace c_Raft
 {
-    public class FileConnector : DataConnector
+    public class FileConnector
     {
         private static string myExeDir = new FileInfo(Assembly.GetEntryAssembly().Location).Directory.ToString();
 
@@ -54,7 +54,7 @@ namespace c_Raft
         //     }
         //    return String.Empty;
         // } 
-        public override string GetDataFromSource()
+        public string GetDataFromSource()
         {
             if (File.Exists(path)) {
                 string readText = File.ReadAllText(path);
@@ -67,7 +67,7 @@ namespace c_Raft
         {
             File.WriteAllText(path, String.Empty);
         }
-        public override void WriteDataToSource(string data)
+        public void WriteDataToSource(string data)
         {
             File.AppendAllText(path, data, Encoding.UTF8);
         }

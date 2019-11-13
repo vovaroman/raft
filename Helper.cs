@@ -12,7 +12,7 @@ public static class Helper
     public static int UdpPort = 0;//GetAvailablePort(1000);
 
     public static int ServerPort = 616;
-    public static string ServerIP = "192.168.1.126";
+    public static string ServerIP = "10.35.1.82";
 
     public static string GetLocalIPAddress()
     {

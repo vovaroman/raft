@@ -20,6 +20,10 @@ namespace c_Raft
         SendToLeader,
 
         GetFromLeader,
-        SendDataToClient
+
+        SendDataToClient,
+
+        GetDataFromLeader
+
     }
 }
