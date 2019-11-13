@@ -84,7 +84,7 @@ namespace c_Raft
          public static void SendDataToClient(object data, string IP, int Port)
          {
             var dataToSend = new Dictionary<string, object>();
-            dataToSend.Add("action", "GetFromLeader");
+            dataToSend.Add("action", "GetDataFromLeader");
             dataToSend.Add("data", data);
             var message = Newtonsoft.Json.JsonConvert.SerializeObject(dataToSend);
             byte[] byteData = Encoding.UTF8.GetBytes(message);
@@ -198,8 +198,8 @@ namespace c_Raft
                         // new FileConnector().WriteDataToSource('\n' + dataToWrite.ToString() + '\n');
                         break;
                     case ServerActions.GetDataFromLeader:
-                        SendDataToClient(FileConnector.GetAllMessagesAsText(),data["address"]["Ip"].ToString()
-                            ,int.Parse(data["address"]["Port"].ToString()));
+                        SendDataToClient(FileConnector.GetAllMessagesAsText(),data["data"]["address"]["Ip"].ToString()
+                            ,int.Parse(data["data"]["address"]["Port"].ToString()));
                     break;
 
                 }
